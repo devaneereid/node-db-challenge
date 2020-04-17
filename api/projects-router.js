@@ -16,16 +16,15 @@ router.get('/', (req, res) => {
 });
 
 // POST Projects
-router.post('/,', (req, res) => {
-    const projectsData = req.body;
-
-    Projects.addProject(projectsData)
-        .then(projects => {
-            res.status(201).json(projects)
-        })
-        .catch(error => {
-            res.status(500).json({ message: 'Failed to create new project' });
-        });
+router.post('/', (req, res) => {
+    const projectData = req.body;
+    Projects.addProject(projectData)
+    .then(project => {
+        res.status(201).json(project);
+    })
+    .catch(error => {
+        res.status(500).json({ message: 'Failed to create new project' });
+    });
 });
 
 // GET Tasks
@@ -40,21 +39,16 @@ router.get('/tasks', (req, res) => {
 });
 
 // POST Tasks
-router.post('/tasks,', (req, res) => {
-    Projects.addTask('tasks')
-        .insert(req.body)
-        .then(ids => {
-            const id = ids[0];
-            Projects('tasks')
-            .where({ id })
-            .first()
-            .then(tasks => {
-                res.status(201).json(tasks)
-            })
-        })
-        .catch(error => {
-            res.status(500).json({ message: 'Failed to create new project' });
-        });
+router.post('/tasks', (req, res) => {
+    const taskData = req.body;
+    const id = req.params.id;
+    Projects.addTask(taskData, id)
+    .then(tasks => {
+        res.status(201).json(tasks);
+    })
+    .catch(error => {
+        res.status(500).json({ message: 'Failed to create new project' });
+    });
 });
 
 // GET Resources
@@ -69,22 +63,17 @@ router.get('/resources', (req, res) => {
 });
 
 // POST Resources
-router.post('/resources,', (req, res) => {
-    Projects.addResource('resources')
-        .insert(req.body)
-        .then(ids => {
-            const id = ids[0];
-            Projects('resources')
-            .where({ id })
-            .first()
-            .then(resources => {
-                res.status(201).json(resources)
-            })
-        })
-        .catch(error => {
-            res.status(500).json({ message: 'Failed to create new resource' });
-        });
+router.post('/resources', (req, res) => {
+    const resourceData = req.body;
+    const id = req.params.id;
+    console.log(req.body)
+    Projects.addResource(resourceData, id)
+    .then(resources => {
+        res.status(201).json(resources);
+    })
+    .catch(error => {
+        res.status(500).json({ message: 'Failed to create new resource' });
+    });
 });
-
 
 module.exports = router;
