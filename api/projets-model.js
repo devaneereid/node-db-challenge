@@ -48,7 +48,7 @@ function remove(id) {
 function getTask() {
     return db('tasks')
         .select('tasks.id', 'projects.id', 'projects.name', 'tasks.project_id', 'tasks.description', 'tasks.notes', 'tasks.completed')
-        .leftJoin('projects', 'tasks.project_id', 'tasks.project_id')
+        .leftJoin('projects', 'tasks.project_id', 'projects.id')
 }
 
 function addTask(task, id) {
