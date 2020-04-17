@@ -27,6 +27,43 @@ router.post('/', (req, res) => {
     });
 });
 
+// PUT Projects 
+router.put('/:id', (req, res) => {
+    const { id } = req.params;
+    const changes = req.body;
+
+    Projects.findById(id)
+    .then(project => {
+        if (project) {
+            Projects.update(changes, id)
+            .then(updatedProject => {
+                res.json(updatedProject);
+            })
+        } else {
+            res.status(404).json({ message: 'Could not find project with the given id' });
+        }
+    })
+    .catch(error => {
+        res.status(500).json({ message: 'Failed to update project' });
+    });
+});
+
+// DELETE Project 
+router.delete('/:id', (req, res) => {
+    const { id } = req.params;
+    Projects.remove(id)
+        .then(deleted => {
+            if (deleted) {
+                res.json({ removed: deleted });
+            } else {
+                res.status(404).json({ message: 'Could not find project with given id' });
+            }
+        })
+        .catch(error => {
+            res.status(500).json({ message: 'Failed to delete project' });
+        });
+});
+
 // GET Tasks
 router.get('/tasks', (req, res) => {
     Projects.getTask()
@@ -49,6 +86,43 @@ router.post('/tasks', (req, res) => {
     .catch(error => {
         res.status(500).json({ message: 'Failed to create new project' });
     });
+});
+
+// PUT Tasks 
+router.put('/tasks/:id', (req, res) => {
+    const { id } = req.params;
+    const changes = req.body;
+
+    Projects.findByTaskId(id)
+    .then(task => {
+        if (task) {
+            Projects.updateTask(changes, id)
+            .then(updatedTask => {
+                res.json(updatedTask);
+            })
+        } else {
+            res.status(404).json({ message: 'Could not find task with the given id' });
+        }
+    })
+    .catch(error => {
+        res.status(500).json({ message: 'Failed to update task' });
+    });
+});
+
+// DELETE Task
+router.delete('/tasks/:id', (req, res) => {
+    const { id } = req.params;
+    Projects.removeTask(id)
+        .then(deletedTask => {
+            if (deletedTask) {
+                res.json({ removed: deletedTask });
+            } else {
+                res.status(404).json({ message: 'Could not find task with given id' });
+            }
+        })
+        .catch(error => {
+            res.status(500).json({ message: 'Failed to delete task' });
+        });
 });
 
 // GET Resources
